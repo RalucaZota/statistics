@@ -6,12 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "serve": "node server.js",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "axios": "^1.7.7",
+    "express": "^4.19.2",
     "pinia": "^2.1.7",
+    "sass": "^1.77.8",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

@@ -1,4 +1,5 @@
 <script setup>
+import '../../src/style/FormInput.scss'
 defineProps({
   label: {
     Type: String
