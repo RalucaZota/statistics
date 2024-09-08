@@ -18,6 +18,7 @@ defineProps({
 defineEmits(['update:modelValue'])
 </script>
 <template>
+  {{ modelValue }}
   <label>{{ label }}</label>
   <input
     v-bind="$attrs"

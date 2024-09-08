@@ -4,28 +4,35 @@ import axios from 'axios'
 import FormInput from '../components/FormInput.vue'
 import '../../src/style/IntroView.scss'
 
-const event = reactive({ email: '', password: '', verifyPassword: '' })
+// Definirea variabilelor reactive
+const event = reactive({ email: '', password: '' })
+const message = ref('')
 
-function onSubmit(event) {
-  event.preventDefault()
-  console.log('merge')
-}
-async function login() {
+// Funcția de submit pentru formular
+async function login(e) {
+  e.preventDefault() // Previne comportamentul implicit al formularului
+
+  console.log('merge') // Verifică dacă funcția este apelată
+
   try {
-    const response = await axios('http://localhost:3000/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userEmail: this.email, password: this.password })
-    })
+    const response = await axios.post(
+      'http://localhost:3000/login',
+      {
+        userEmail: event.email,
+        password: event.password
+      },
+      { withCredentials: true }
+    )
 
-    const data = await response.json()
-    if (response.ok) {
-      this.message = data.message
+    // Actualizează mesajul bazat pe răspunsul de la server
+    if (response.data.success) {
+      message.value = response.data.message
+      console.log(response.data.message)
     } else {
-      this.message = data.message
+      message.value = response.data.message
     }
   } catch (error) {
-    this.message = 'Eroare la autentificare.'
+    message.value = 'Eroare la autentificare.'
     console.error('Eroare:', error)
   }
 }
@@ -34,24 +41,21 @@ async function login() {
 <template>
   <div class="about">
     <h1>INTRO PAGE</h1>
+    <p v-if="message">{{ message }}</p>
   </div>
-  <div class="form-input">
-    <form-input label="Email" type="text" placeholder="Enter your email" v-model="event.email" />
-    <form-input
-      label="Password"
-      type="password"
-      placeholder="Type your password"
-      v-model="event.password"
-    />
-    <!-- <form-input
-      label="Password"
-      type="password"
-      placeholder="Retype your password"
-      v-model="event.verifyPassword"
-    /> -->
-  </div>
-  <button @submit.prevent="LogIn" type="submit">LOGIN</button><br />
-  <button @submit.prevent="Register" type="submit">REGISTER</button>
+  <form @submit.prevent="login">
+    <div class="form-input">
+      <form-input label="Email" type="text" placeholder="Enter your email" v-model="event.email" />
+      <form-input
+        label="Password"
+        type="password"
+        placeholder="Type your password"
+        v-model="event.password"
+      />
+    </div>
+    <button type="submit">LOGIN</button>
+  </form>
+  <p>{{ event.email }} {{ event.password }}</p>
 </template>
 
 <style></style>
