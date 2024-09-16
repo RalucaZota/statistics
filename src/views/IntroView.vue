@@ -7,6 +7,7 @@ import '../../src/style/IntroView.scss'
 // Definirea variabilelor reactive
 const event = reactive({ email: '', password: '' })
 const message = ref('')
+const isAuthenticated = ref(false)
 
 // Funcția de submit pentru formular
 async function login(e) {
@@ -36,6 +37,19 @@ async function login(e) {
     console.error('Eroare:', error)
   }
 }
+async function addDataToFirebase() {
+  try {
+    const userRef = dbRef(database, 'users/' + event.email.replace('.', '_')) // Creează o referință către baza de date
+    await set(userRef, {
+      email: event.email,
+      data: 'Exemplu de date stocate' // Datele pe care vrei să le stochezi
+    })
+    message.value = 'Date adăugate cu succes!'
+  } catch (error) {
+    console.error('Eroare la adăugarea datelor în Firebase:', error)
+    message.value = 'Eroare la adăugarea datelor în Firebase.'
+  }
+}
 </script>
 
 <template>
@@ -55,6 +69,7 @@ async function login(e) {
     </div>
     <button type="submit">LOGIN</button>
   </form>
+  <button @click="addDataToFirebase">Adaugă Date în Firebase</button>
   <p>{{ event.email }} {{ event.password }}</p>
 </template>
 

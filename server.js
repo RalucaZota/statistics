@@ -20,21 +20,17 @@ app.use(
 )
 
 const corsOptions = {
-  origin: 'http://127.0.0.1:5173', // Permite cererile doar de la o anumită origine
-  methods: 'GET,POST', // Permite doar metodele specificate
-  allowedHeaders: ['Content-Type', 'Authorization'], // Adaugă anteturile permise
+  origin: 'http://127.0.0.1:5173',
+  methods: 'GET,POST',
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }
 
 app.use(cors(corsOptions))
 
-// Middleware pentru parsarea corpului cererii (JSON)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-console.log('here smth')
-
-// Endpoint pentru autentificare (POST)
 app.post('/login', (req, res) => {
   const { userEmail, password } = req.body
 
