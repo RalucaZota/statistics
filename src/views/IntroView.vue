@@ -1,19 +1,20 @@
 <script setup>
 import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { database } from '../main'
+import { ref as dbRef, set } from 'firebase/database'
 import FormInput from '../components/FormInput.vue'
 import '../../src/style/IntroView.scss'
 
-// Definirea variabilelor reactive
+const router = useRouter()
 const event = reactive({ email: '', password: '' })
 const message = ref('')
 const isAuthenticated = ref(false)
-
-// Funcția de submit pentru formular
 async function login(e) {
-  e.preventDefault() // Previne comportamentul implicit al formularului
+  e.preventDefault()
 
-  console.log('merge') // Verifică dacă funcția este apelată
+  console.log('merge')
 
   try {
     const response = await axios.post(
@@ -25,9 +26,9 @@ async function login(e) {
       { withCredentials: true }
     )
 
-    // Actualizează mesajul bazat pe răspunsul de la server
     if (response.data.success) {
       message.value = response.data.message
+      router.push('/dashboard')
       console.log(response.data.message)
     } else {
       message.value = response.data.message
