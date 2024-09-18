@@ -28,7 +28,7 @@ async function login(e) {
 
     if (response.data.success) {
       message.value = response.data.message
-      router.push('/dashboard')
+      router.replace('/dashboard')
       console.log(response.data.message)
     } else {
       message.value = response.data.message
@@ -43,7 +43,7 @@ async function addDataToFirebase() {
     const userRef = dbRef(database, 'users/' + event.email.replace('.', '_')) // Creează o referință către baza de date
     await set(userRef, {
       email: event.email,
-      data: 'Exemplu de date stocate' // Datele pe care vrei să le stochezi
+      password: event.password // Datele pe care vrei să le stochezi
     })
     message.value = 'Date adăugate cu succes!'
   } catch (error) {
@@ -55,7 +55,7 @@ async function addDataToFirebase() {
 
 <template>
   <div class="about">
-    <h1>INTRO PAGE</h1>
+    <h1>LOGIN PAGE</h1>
     <p v-if="message">{{ message }}</p>
   </div>
   <form @submit.prevent="login">

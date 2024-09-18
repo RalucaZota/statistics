@@ -1,4 +1,4 @@
 <script setup></script>
 <template>
-  <div>sss</div>
+  <div style="background-color: red">sss</div>
 </template>
