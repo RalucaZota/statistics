@@ -11,10 +11,9 @@ const router = useRouter()
 const event = reactive({ email: '', password: '' })
 const message = ref('')
 const isAuthenticated = ref(false)
+
 async function login(e) {
   e.preventDefault()
-
-  console.log('merge')
 
   try {
     const response = await axios.post(
@@ -32,6 +31,7 @@ async function login(e) {
       console.log(response.data.message)
     } else {
       message.value = response.data.message
+      console.log('here smth')
     }
   } catch (error) {
     message.value = 'Eroare la autentificare.'

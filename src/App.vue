@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
-import LoginIn from './views/LoginIn.vue'
+import LogIn from './views/LogIn.vue'
 </script>
 
 <template>
