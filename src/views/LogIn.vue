@@ -27,7 +27,8 @@ async function login(e) {
 
     if (response.data.success) {
       message.value = response.data.message
-      router.replace('/dashboard')
+      localStorage.setItem('token', response.data.token)
+      isAuthenticated.value = true
       console.log(response.data.message)
     } else {
       message.value = response.data.message
@@ -35,6 +36,28 @@ async function login(e) {
     }
   } catch (error) {
     message.value = 'Eroare la autentificare.'
+    console.error('Eroare:', error)
+  }
+}
+async function accessProtectedRoute() {
+  const token = localStorage.getItem('token')
+
+  try {
+    const response = await axios.get('http://localhost:3000/dashboard', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response.data.success) {
+      message.value = response.data.message
+      router.replace('/dashboard')
+      console.log(response.data.message)
+    } else {
+      message.value = 'Accesul nu este permis.'
+    }
+  } catch (error) {
+    message.value = 'Eroare la accesarea rutei protejate.'
     console.error('Eroare:', error)
   }
 }
@@ -61,6 +84,7 @@ async function addDataToFirebase() {
   <form @submit.prevent="login">
     <div class="form-input">
       <form-input label="Email" type="text" placeholder="Enter your email" v-model="event.email" />
+      <br />
       <form-input
         label="Password"
         type="password"
@@ -68,10 +92,15 @@ async function addDataToFirebase() {
         v-model="event.password"
       />
     </div>
+    <br />
     <button type="submit">LOGIN</button>
   </form>
-  <button @click="addDataToFirebase">Adaugă Date în Firebase</button>
   <p>{{ event.email }} {{ event.password }}</p>
+  <br />
+  <br />
+  <button @click="accessProtectedRoute">Accesează Ruta Protejată</button>
+  <br />
+  <button @click="addDataToFirebase">Adaugă Date în Firebase</button>
 </template>
 
 <style></style>

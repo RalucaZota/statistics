@@ -34,6 +34,24 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+function verifyToken(req, res, next) {
+  const token = req.headers['authorization']?.split(' ')[1]
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Token lipsă.' })
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ success: false, message: 'Timpul a expirat.' })
+      }
+      return res.status(403).json({ success: false, message: 'Token invalid.' })
+    }
+    req.user = decoded // Attach user info to the request
+    next() // Move to the next middleware or route handler
+  })
+}
+
 app.post('/login', (req, res) => {
   const { userEmail, password } = req.body
   console.log('si aci222')
@@ -51,6 +69,11 @@ app.post('/login', (req, res) => {
   } else {
     res.status(401).json({ success: false, message: 'Credențiale incorecte.' })
   }
+})
+
+app.get('/dashboard', verifyToken, (req, res) => {
+  res.json({ success: true, message: 'Acces permis.', data: req.user })
+  console.log('merge here?')
 })
 
 // Endpoint pentru cereri GET la /login (opțional)
