@@ -36,6 +36,8 @@ app.use(express.urlencoded({ extended: true }))
 
 function verifyToken(req, res, next) {
   const token = req.headers['authorization']?.split(' ')[1]
+  console.log(token)
+
   if (!token) {
     return res.status(401).json({ success: false, message: 'Token lipsă.' })
   }
@@ -54,7 +56,6 @@ function verifyToken(req, res, next) {
 
 app.post('/login', (req, res) => {
   const { userEmail, password } = req.body
-  console.log('si aci222')
   // Validează utilizatorul (în exemplul acesta folosim credențiale hardcodate)
   if (userEmail === 'test@gmail.com' && password === 'password') {
     // Creează payload-ul pentru JWT
@@ -62,7 +63,7 @@ app.post('/login', (req, res) => {
     console.log(payload, 'test')
 
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1m' })
-    console.log(token)
+    console.log(payload, JWT_SECRET)
 
     // Trimite token-ul către client
     res.json({ success: true, token, message: 'Autentificare reușită!' })
