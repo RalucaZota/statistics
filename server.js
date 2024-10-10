@@ -23,7 +23,7 @@ app.use(
 )
 
 const corsOptions = {
-  origin: 'http://127.0.0.1:5173',
+  origin: 'http://localhost:5173',
   methods: 'GET,POST',
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -45,6 +45,7 @@ function verifyToken(req, res, next) {
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
       if (err.name === 'TokenExpiredError') {
+        console.log('Token expirat.')
         return res.status(401).json({ success: false, message: 'Timpul a expirat.' })
       }
       return res.status(403).json({ success: false, message: 'Token invalid.' })
